@@ -4,8 +4,10 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1b564225-7536-4bda-b73e-d54058782c1f" name="Changes" comment="lab1 pass all but crash test">
+    <list default="true" id="1b564225-7536-4bda-b73e-d54058782c1f" name="Changes" comment="lab1 env">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/mr/master.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/mr/master.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/mr/rpc.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/mr/rpc.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/mr/worker.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/mr/worker.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -110,7 +112,8 @@
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
     <MESSAGE value="first commit" />
     <MESSAGE value="lab1 pass all but crash test" />
-    <option name="LAST_COMMIT_MESSAGE" value="lab1 pass all but crash test" />
+    <MESSAGE value="lab1 env" />
+    <option name="LAST_COMMIT_MESSAGE" value="lab1 env" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>
