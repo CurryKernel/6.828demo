@@ -1,9 +1,10 @@
 package shardkv
 
-import "6.824/labrpc"
-import "6.824/raft"
+// import "../shardmaster"
+import "../labrpc"
+import "../raft"
 import "sync"
-import "6.824/labgob"
+import "../labgob"
 
 type Op struct {
 	// Your definitions here.
@@ -18,7 +19,7 @@ type ShardKV struct {
 	applyCh      chan raft.ApplyMsg
 	make_end     func(string) *labrpc.ClientEnd
 	gid          int
-	ctrlers      []*labrpc.ClientEnd
+	masters      []*labrpc.ClientEnd
 	maxraftstate int // snapshot if log grows this big
 
 	// Your definitions here.
@@ -56,22 +57,22 @@ func (kv *ShardKV) Kill() {
 // maxraftstate bytes, in order to allow Raft to garbage-collect its
 // log. if maxraftstate is -1, you don't need to snapshot.
 //
-// gid is this group's GID, for interacting with the shardctrler.
+// gid is this group's GID, for interacting with the shardmaster.
 //
-// pass ctrlers[] to shardctrler.MakeClerk() so you can send
-// RPCs to the shardctrler.
+// pass masters[] to shardmaster.MakeClerk() so you can send
+// RPCs to the shardmaster.
 //
 // make_end(servername) turns a server name from a
 // Config.Groups[gid][i] into a labrpc.ClientEnd on which you can
 // send RPCs. You'll need this to send RPCs to other groups.
 //
-// look at client.go for examples of how to use ctrlers[]
+// look at client.go for examples of how to use masters[]
 // and make_end() to send RPCs to the group owning a specific shard.
 //
 // StartServer() must return quickly, so it should start goroutines
 // for any long-running work.
 //
-func StartServer(servers []*labrpc.ClientEnd, me int, persister *raft.Persister, maxraftstate int, gid int, ctrlers []*labrpc.ClientEnd, make_end func(string) *labrpc.ClientEnd) *ShardKV {
+func StartServer(servers []*labrpc.ClientEnd, me int, persister *raft.Persister, maxraftstate int, gid int, masters []*labrpc.ClientEnd, make_end func(string) *labrpc.ClientEnd) *ShardKV {
 	// call labgob.Register on structures you want
 	// Go's RPC library to marshall/unmarshall.
 	labgob.Register(Op{})
@@ -81,12 +82,12 @@ func StartServer(servers []*labrpc.ClientEnd, me int, persister *raft.Persister,
 	kv.maxraftstate = maxraftstate
 	kv.make_end = make_end
 	kv.gid = gid
-	kv.ctrlers = ctrlers
+	kv.masters = masters
 
 	// Your initialization code here.
 
-	// Use something like this to talk to the shardctrler:
-	// kv.mck = shardctrler.MakeClerk(kv.ctrlers)
+	// Use something like this to talk to the shardmaster:
+	// kv.mck = shardmaster.MakeClerk(kv.masters)
 
 	kv.applyCh = make(chan raft.ApplyMsg)
 	kv.rf = raft.Make(servers, me, persister, kv.applyCh)

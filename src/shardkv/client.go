@@ -3,15 +3,15 @@ package shardkv
 //
 // client code to talk to a sharded key/value service.
 //
-// the client first talks to the shardctrler to find out
+// the client first talks to the shardmaster to find out
 // the assignment of shards (keys) to groups, and then
 // talks to the group that holds the key's shard.
 //
 
-import "6.824/labrpc"
+import "../labrpc"
 import "crypto/rand"
 import "math/big"
-import "6.824/shardctrler"
+import "../shardmaster"
 import "time"
 
 //
@@ -24,7 +24,7 @@ func key2shard(key string) int {
 	if len(key) > 0 {
 		shard = int(key[0])
 	}
-	shard %= shardctrler.NShards
+	shard %= shardmaster.NShards
 	return shard
 }
 
@@ -36,8 +36,8 @@ func nrand() int64 {
 }
 
 type Clerk struct {
-	sm       *shardctrler.Clerk
-	config   shardctrler.Config
+	sm       *shardmaster.Clerk
+	config   shardmaster.Config
 	make_end func(string) *labrpc.ClientEnd
 	// You will have to modify this struct.
 }
@@ -45,15 +45,15 @@ type Clerk struct {
 //
 // the tester calls MakeClerk.
 //
-// ctrlers[] is needed to call shardctrler.MakeClerk().
+// masters[] is needed to call shardmaster.MakeClerk().
 //
 // make_end(servername) turns a server name from a
 // Config.Groups[gid][i] into a labrpc.ClientEnd on which you can
 // send RPCs.
 //
-func MakeClerk(ctrlers []*labrpc.ClientEnd, make_end func(string) *labrpc.ClientEnd) *Clerk {
+func MakeClerk(masters []*labrpc.ClientEnd, make_end func(string) *labrpc.ClientEnd) *Clerk {
 	ck := new(Clerk)
-	ck.sm = shardctrler.MakeClerk(ctrlers)
+	ck.sm = shardmaster.MakeClerk(masters)
 	ck.make_end = make_end
 	// You'll have to add code here.
 	return ck
@@ -88,7 +88,7 @@ func (ck *Clerk) Get(key string) string {
 			}
 		}
 		time.Sleep(100 * time.Millisecond)
-		// ask controler for the latest configuration.
+		// ask master for the latest configuration.
 		ck.config = ck.sm.Query(-1)
 	}
 
@@ -123,7 +123,7 @@ func (ck *Clerk) PutAppend(key string, value string, op string) {
 			}
 		}
 		time.Sleep(100 * time.Millisecond)
-		// ask controler for the latest configuration.
+		// ask master for the latest configuration.
 		ck.config = ck.sm.Query(-1)
 	}
 }
