@@ -1,16 +1,14 @@
 package mr
 
-import (
-	"encoding/json"
-	"fmt"
-	"io/ioutil"
-	"os"
-	"sort"
-	"strconv"
-)
+import "fmt"
 import "log"
 import "net/rpc"
 import "hash/fnv"
+import "os"
+import "io/ioutil"
+import "strconv"
+import "encoding/json"
+import "sort"
 
 // for sorting by key.
 type ByKey []KeyValue
@@ -59,99 +57,7 @@ func Worker(mapf func(string, string) []KeyValue,
 	}
 }
 
-// Add your RPC definitions here.
-// CallForTask : my RPC call function
-func CallForTask(msgType int, msgCnt string) MyReply {
-	args := MyArgs{}
-	args.MessageType = msgType
-	args.MessageCnt = msgCnt
-
-	reply := MyReply{}
-
-	// call
-	res := call("Master.MyCallHandler", &args, &reply)
-	if res {
-		fmt.Printf("reply.type %v\n", reply.TaskType)
-	} else {
-		return MyReply{TaskType: ""}
-	}
-	return reply
-}
-
 //
-// example function to show how to make an RPC call to the master.
-//
-// the RPC argument and reply types are defined in rpc.go.
-//
-func CallExample() {
-
-	// declare an argument structure.
-	args := ExampleArgs{}
-
-	// fill in the argument(s).
-	args.X = 99
-
-	// declare a reply structure.
-	reply := ExampleReply{}
-
-	// send the RPC request, wait for the reply.
-	call("Master.Example", &args, &reply)
-
-	// reply.Y should be 100.
-	fmt.Printf("reply.Y %v\n", reply.Y)
-}
-
-//
-// send an RPC request to the master, wait for the response.
-// usually returns true.
-// returns false if something goes wrong.
-//
-func call(rpcname string, args interface{}, reply interface{}) bool {
-	// c, err := rpc.DialHTTP("tcp", "127.0.0.1"+":1234")
-	sockname := masterSock()
-	c, err := rpc.DialHTTP("unix", sockname)
-	if err != nil {
-		log.Fatal("dialing:", err)
-	}
-	defer c.Close()
-
-	err = c.Call(rpcname, args, reply)
-	if err == nil {
-		return true
-	}
-
-	fmt.Println(err)
-	return false
-}
-
-// Partition : divide intermedia keyvalue pairs into nReduce buckets
-func Partition(kva []KeyValue, nReduce int) [][]KeyValue {
-	kvas := make([][]KeyValue, nReduce)
-	for _, kv := range kva {
-		v := ihash(kv.Key) % nReduce
-		kvas[v] = append(kvas[v], kv)
-	}
-	return kvas
-}
-
-//参数1是某个分割的中间值的某一项，也就是用于某一个 reduce 任务执行的一项数据。参数2代表本 map 任务的编号。
-//这个编号是由 master 分配的。参数3是代表这一项分割后的数据，适用于的 reduce 任务的编号。
-//这样，在函数内部生产文件，将内容写入文件，返回中间文件名
-// WriteToJSONFile : write intermediate KeyValue pairs to a Json file
-func WriteToJSONFile(intermediate []KeyValue, mapTaskNum, reduceTaskNUm int) string {
-	filename := "mr-" + strconv.Itoa(mapTaskNum) + "-" + strconv.Itoa(reduceTaskNUm)
-	jfile, _ := os.Create(filename)
-
-	enc := json.NewEncoder(jfile)
-	for _, kv := range intermediate {
-		err := enc.Encode(&kv)
-		if err != nil {
-			log.Fatal("error: ", err)
-		}
-	}
-	return filename
-}
-
 // mapInWorker : workers do the map phase
 func mapInWorker(reply *MyReply, mapf func(string, string) []KeyValue) {
 	file, err := os.Open(reply.Filename)
@@ -179,8 +85,8 @@ func mapInWorker(reply *MyReply, mapf func(string, string) []KeyValue) {
 // reduceInWroker : workers do the reduce phase
 func reduceInWorker(reply *MyReply, reducef func(string, []string) string) {
 	intermediate := []KeyValue{}
-	// read intermediate key/value pairs
 	for _, v := range reply.ReduceFileList {
+		// fmt.Println(v)
 		file, err := os.Open(v)
 		defer file.Close()
 		if err != nil {
@@ -195,13 +101,11 @@ func reduceInWorker(reply *MyReply, reducef func(string, []string) string) {
 			intermediate = append(intermediate, kv)
 		}
 	}
-	// sort value
 	sort.Sort(ByKey(intermediate))
 	oname := "mr-out-" + strconv.Itoa(reply.ReduceNumAllocated)
 	ofile, _ := os.Create(oname)
 
 	i := 0
-	// reduce
 	for i < len(intermediate) {
 		j := i + 1
 		for j < len(intermediate) && intermediate[j].Key == intermediate[i].Key {
@@ -218,6 +122,78 @@ func reduceInWorker(reply *MyReply, reducef func(string, []string) string) {
 	_ = CallForTask(MsgForFinishReduce, strconv.Itoa(reply.ReduceNumAllocated))
 }
 
+// CallForTask : my RPC call function
+func CallForTask(msgType int, msgCnt string) MyReply {
+	args := MyArgs{}
+	args.MessageType = msgType
+	args.MessageCnt = msgCnt
+
+	reply := MyReply{}
+
+	// call
+	res := call("Master.MyCallHandler", &args, &reply)
+	if !res {
+		return MyReply{TaskType: ""}
+	}
+	return reply
+}
+
+// SendInterFiles : send intermediate files' location (filenames here) to master
+func SendInterFiles(msgType int, msgCnt string, nReduceType int) MyReply {
+	args := MyIntermediateFile{}
+	args.MessageType = msgType
+	args.MessageCnt = msgCnt
+	args.NReduceType = nReduceType
+
+	repley := MyReply{}
+
+	res := call("Master.MyInnerFileHandler", &args, &repley)
+	if !res {
+		fmt.Println("error sending intermediate files' location")
+	}
+	return repley
+}
+
+//
+// send an RPC request to the master, wait for the response.
+// usually returns true.
+// returns false if something goes wrong.
+//
+func call(rpcname string, args interface{}, reply interface{}) bool {
+	// c, err := rpc.DialHTTP("tcp", "127.0.0.1"+":1234")
+	sockname := masterSock()
+	c, err := rpc.DialHTTP("unix", sockname)
+	if err != nil {
+		log.Fatal("dialing:", err)
+	}
+	defer c.Close()
+
+	err = c.Call(rpcname, args, reply)
+	if err == nil {
+		return true
+	}
+
+	if err.Error() != "unexpected EOF" {
+		fmt.Println("error: ", err)
+	}
+	return false
+}
+
+// WriteToJSONFile : write intermediate KeyValue pairs to a Json file
+func WriteToJSONFile(intermediate []KeyValue, mapTaskNum, reduceTaskNUm int) string {
+	filename := "mr-" + strconv.Itoa(mapTaskNum) + "-" + strconv.Itoa(reduceTaskNUm)
+	jfile, _ := os.Create(filename)
+
+	enc := json.NewEncoder(jfile)
+	for _, kv := range intermediate {
+		err := enc.Encode(&kv)
+		if err != nil {
+			log.Fatal("error: ", err)
+		}
+	}
+	return filename
+}
+
 // WriteToReduceOutput : write to final file
 func WriteToReduceOutput(key, values string, nReduce int) {
 	filename := "mr-out-" + strconv.Itoa(nReduce)
@@ -228,4 +204,14 @@ func WriteToReduceOutput(key, values string, nReduce int) {
 	}
 
 	fmt.Fprintf(ofile, "%v %v\n", key, values)
+}
+
+// Partition : divide intermedia keyvalue pairs into nReduce buckets
+func Partition(kva []KeyValue, nReduce int) [][]KeyValue {
+	kvas := make([][]KeyValue, nReduce)
+	for _, kv := range kva {
+		v := ihash(kv.Key) % nReduce
+		kvas[v] = append(kvas[v], kv)
+	}
+	return kvas
 }
