@@ -5,50 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1b564225-7536-4bda-b73e-d54058782c1f" name="Changes" comment="lab1">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/kvraft/client.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/kvraft/client.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/kvraft/common.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/kvraft/common.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/kvraft/config.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/kvraft/config.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/kvraft/server.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/kvraft/server.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/kvraft/test_test.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/kvraft/test_test.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/labgob/labgob.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/labgob/labgob.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/labgob/test_test.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/labgob/test_test.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/labrpc/labrpc.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/labrpc/labrpc.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/labrpc/test_test.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/labrpc/test_test.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/diskvd.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/diskvd.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/lockc.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/lockc.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/lockd.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/lockd.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/mrmaster.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/mrmaster.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/mrsequential.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/mrsequential.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/mrworker.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/mrworker.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/pbc.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/pbc.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/pbd.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/pbd.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/test-mr.sh" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/test-mr.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/viewd.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/viewd.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/mr/master.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/mr/master.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/mr/rpc.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/mr/rpc.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/mr/worker.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/mr/worker.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/mrapps/crash.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/mrapps/crash.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/mrapps/indexer.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/mrapps/indexer.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/mrapps/mtiming.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/mrapps/mtiming.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/mrapps/nocrash.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/mrapps/nocrash.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/mrapps/rtiming.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/mrapps/rtiming.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/mrapps/wc.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/mrapps/wc.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/raft/config.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/raft/config.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/raft/persister.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/raft/persister.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/raft/raft.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/raft/raft.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/raft/test_test.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/raft/test_test.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/raft/util.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/raft/util.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/shardkv/client.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/shardkv/client.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/shardkv/common.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/shardkv/common.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/shardkv/config.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/shardkv/config.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/shardkv/server.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/shardkv/server.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/shardkv/test_test.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/shardkv/test_test.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/shardmaster/client.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/shardmaster/client.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/shardmaster/common.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/shardmaster/common.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/shardmaster/config.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/shardmaster/config.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/shardmaster/server.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/shardmaster/server.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/shardmaster/test_test.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/shardmaster/test_test.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/README.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/linearizability/bitset.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/linearizability/linearizability.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/linearizability/model.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/linearizability/models.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/mrmaster" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/mrsequential" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/mrworker" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
