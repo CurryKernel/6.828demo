@@ -23,7 +23,7 @@ int getpid(void);
 char* sbrk(int);
 int sleep(int);
 int uptime(void);
-
+int trace(int);
 // ulib.c
 int stat(const char*, struct stat*);
 char* strcpy(char*, const char*);
@@ -40,3 +40,10 @@ void free(void*);
 int atoi(const char*);
 int memcmp(const void *, const void *, uint);
 void *memcpy(void *, const void *, uint);
+
+
+//user/user.h 用户态程序调用函数trace()
+//user/usys.S trace()使用CPU提供的ecall指令，调用内核态
+//kernel/syscall.c 到达内核态统一调用处理函数syscall()
+//kernel/syscall.c syscall()根据系统调用编号，查询syscalls[]表，找到对应的内核函数进行调用
+//kernel/sysproc.c 到达sys_trace()函数，再执行内核的具体操作
