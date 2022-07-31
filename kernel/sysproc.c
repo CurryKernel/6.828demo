@@ -104,3 +104,16 @@ sys_trace(){
 	myproc()->syscall_trace = mask;//设置调用进程的 syscall_trace mask
 	return 0;
 }
+
+uint64
+sys_sysinfo(void){
+	struct sysinfo info;
+	uint64 add;
+	if(argfd(0, 0, &f) < 0 || argaddr(1, &st) < 0)
+		return -1;
+	info.freemem = count_freemem();
+	info.nproc = count_proc();
+	if(copyout(myproc()->pagetable, addr, (char *)&info, sizeof(info)) < 0)
+		return -1;
+	return 0;
+}
