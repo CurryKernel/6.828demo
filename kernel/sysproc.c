@@ -1,8 +1,8 @@
 #include "types.h"
 #include "riscv.h"
+#include "param.h"
 #include "defs.h"
 #include "date.h"
-#include "param.h"
 #include "memlayout.h"
 #include "spinlock.h"
 #include "proc.h"
@@ -46,6 +46,7 @@ sys_sbrk(void)
 
   if(argint(0, &n) < 0)
     return -1;
+  
   addr = myproc()->sz;
   if(growproc(n) < 0)
     return -1;
@@ -57,6 +58,7 @@ sys_sleep(void)
 {
   int n;
   uint ticks0;
+
 
   if(argint(0, &n) < 0)
     return -1;
@@ -72,6 +74,16 @@ sys_sleep(void)
   release(&tickslock);
   return 0;
 }
+
+
+#ifdef LAB_PGTBL
+int
+sys_pgaccess(void)
+{
+  // lab pgtbl: your code here.
+  return 0;
+}
+#endif
 
 uint64
 sys_kill(void)
@@ -94,26 +106,4 @@ sys_uptime(void)
   xticks = ticks;
   release(&tickslock);
   return xticks;
-}
-uint64
-sys_trace(){
-	//获得syscall 的 mask
-	int mask;
-	if(argint(0, &mask) < 0)
-		return -1;
-	myproc()->syscall_trace = mask;//设置调用进程的 syscall_trace mask
-	return 0;
-}
-
-uint64
-sys_sysinfo(void){
-	struct sysinfo info;
-	uint64 add;
-	if(argfd(0, 0, &f) < 0 || argaddr(1, &st) < 0)
-		return -1;
-	info.freemem = count_freemem();
-	info.nproc = count_proc();
-	if(copyout(myproc()->pagetable, addr, (char *)&info, sizeof(info)) < 0)
-		return -1;
-	return 0;
 }

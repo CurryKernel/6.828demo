@@ -104,7 +104,13 @@ extern uint64 sys_unlink(void);
 extern uint64 sys_wait(void);
 extern uint64 sys_write(void);
 extern uint64 sys_uptime(void);
-extern uint64 sys_trace(void );
+#ifdef LAB_NET
+extern uint64 sys_connect(void);
+#endif
+#ifdef LAB_PGTBL
+extern uint64 sys_pgaccess(void);
+#endif
+
 static uint64 (*syscalls[])(void) = {
 [SYS_fork]    sys_fork,
 [SYS_exit]    sys_exit,
@@ -127,8 +133,15 @@ static uint64 (*syscalls[])(void) = {
 [SYS_link]    sys_link,
 [SYS_mkdir]   sys_mkdir,
 [SYS_close]   sys_close,
-[SYS_trace]   sys_trace,
+#ifdef LAB_NET
+[SYS_connect] sys_connect,
+#endif
+#ifdef LAB_PGTBL
+[SYS_pgaccess] sys_pgaccess,
+#endif
 };
+
+
 
 void
 syscall(void)
@@ -138,38 +151,10 @@ syscall(void)
 
   num = p->trapframe->a7;
   if(num > 0 && num < NELEM(syscalls) && syscalls[num]) {
-    p->trapframe->a0 = syscalls[num]();//通过系统调用编号，取得系统调用处理函数的指针，调用并将返回值存到用户进程的a0
-	//如果当前进程设置了对该编号系统调用的trace,则打印pid \系统调用名称和返回值
-	if((p->syscall_trace >> num) & 1){
-		printf("%d: syscall %s -> %d\n",p->pid,syscalls_names[num],p->trapframe->a0);
-	}
+    p->trapframe->a0 = syscalls[num]();
   } else {
     printf("%d %s: unknown sys call %d\n",
             p->pid, p->name, num);
     p->trapframe->a0 = -1;
   }
 }
-const char *syscall_names[] = {
-		[SYS_fork]    "fork",
-		[SYS_exit]    "exit",
-		[SYS_wait]    "wait",
-		[SYS_pipe]    "pipe",
-		[SYS_read]    "read",
-		[SYS_kill]    "kill",
-		[SYS_exec]    "exec",
-		[SYS_fstat]   "fstat",
-		[SYS_chdir]   "chdir",
-		[SYS_dup]     "dup",
-		[SYS_getpid]  "getpid",
-		[SYS_sbrk]    "sbrk",
-		[SYS_sleep]   "sleep",
-		[SYS_uptime]  "uptime",
-		[SYS_open]    "open",
-		[SYS_write]   "write",
-		[SYS_mknod]   "mknod",
-		[SYS_unlink]  "unlink",
-		[SYS_link]    "link",
-		[SYS_mkdir]   "mkdir",
-		[SYS_close]   "close",
-		[SYS_trace]   "trace",
-};
